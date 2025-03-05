@@ -6,7 +6,7 @@ const Explore = () => {
     <View>
       <Text>E</Text>
     </View>
-  )
+  )  
 }
 
 export default Explore
