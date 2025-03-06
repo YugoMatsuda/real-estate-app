@@ -5,12 +5,15 @@ import {
   Image,
   ImageSourcePropType,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import icons from "@/constants/icons";
 import images from "@/constants/images";
 import { settings } from "@/constants/data";
+import { useGlobalContext } from "@/lib/global-provider";
+import { logout } from "@/lib/appwrite";
 
 interface SettingsItemProp {
   icon: ImageSourcePropType;
@@ -43,7 +46,17 @@ const SettingsItem = ({
 );
 
 const Profile = () => {
-  const handleLogout = async () => {};
+  const { user, refetch } = useGlobalContext();
+
+  const handleLogout = async () => {
+    const result = await logout();
+    if (result) {
+      Alert.alert("Success", "Logged out successfully");
+      refetch;
+    } else {
+      Alert.alert("Error", "Failed to logout");
+    }
+  };
   return (
     <SafeAreaView className="bg-white h-full">
       <ScrollView
@@ -58,14 +71,16 @@ const Profile = () => {
         <View className="flex flex-row justify-center mt-5">
           <View className="flex flex-col items-center relative mt-5">
             <Image
-              source={images?.avatar}
+              source={{ uri: user?.avatar }}
               className="size-44 relative rounded-full"
             />
             <TouchableOpacity className="absolute bottom-11 right-2">
               <Image source={icons.edit} className="size-9" />
             </TouchableOpacity>
 
-            <Text className="text-2xl font-rubik-bold mt-2">John Doe</Text>
+            <Text className="text-2xl font-rubik-bold mt-2">
+              {user?.name ?? "Annonymous"}
+            </Text>
           </View>
         </View>
 
