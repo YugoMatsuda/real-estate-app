@@ -4,6 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import images from "@/constants/images";
 import icons from "@/constants/icons";
 import Search from "@/components/Search";
+import { FeatureCard, Card } from "@/components/Cards";
 
 export default function Index() {
   return (
@@ -36,6 +37,8 @@ export default function Index() {
             </TouchableOpacity>
           </View>
         </View>
+        <FeatureCard />
+        {/* <Card /> */}
       </View>
     </SafeAreaView>
   );
