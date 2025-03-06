@@ -1,8 +1,9 @@
-import { Text, View, Image } from "react-native";
+import { Text, View, Image, TouchableOpacity } from "react-native";
 import { Link } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import images from "@/constants/images";
 import icons from "@/constants/icons";
+import Search from "@/components/Search";
 
 export default function Index() {
   return (
@@ -21,6 +22,19 @@ export default function Index() {
             </View>
           </View>
           <Image source={icons.bell} className="size-6" />
+        </View>
+        <Search />
+        <View className="my-5">
+          <View className="flex flex-row items-center justify-between">
+            <Text className="text-xl font-rubik-bold text-black-300">
+              Featured
+            </Text>
+            <TouchableOpacity>
+              <Text className="text-base font-rubik-bold text-primary-300">
+                See all
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </SafeAreaView>
