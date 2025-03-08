@@ -36,9 +36,27 @@ export default function Index() {
               </Text>
             </TouchableOpacity>
           </View>
+          <View className="flex flex-row gap-5 mt-5">
+            <FeatureCard />
+            <FeatureCard />
+          </View>
+
+          <View className="flex flex-row items-center justify-between mt-10">
+            <Text className="text-xl font-rubik-bold text-black-300">
+              Our Recommendation
+            </Text>
+            <TouchableOpacity>
+              <Text className="text-base font-rubik-bold text-primary-300">
+                See all
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          <View className="flex flex-row gap-5 mt-5">
+            <Card />
+            <Card />
+          </View>
         </View>
-        <FeatureCard />
-        {/* <Card /> */}
       </View>
     </SafeAreaView>
   );
