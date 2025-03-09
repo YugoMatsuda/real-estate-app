@@ -1,29 +1,65 @@
 import {
-  Text,
-  View,
-  Image,
-  TouchableOpacity,
+  ActivityIndicator,
   FlatList,
-  Button,
+  Image,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
-import { Link } from "expo-router";
+import { useEffect } from "react";
+import { router, useLocalSearchParams } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
-import images from "@/constants/images";
+
 import icons from "@/constants/icons";
+
 import Search from "@/components/Search";
-import { FeatureCard, Card } from "@/components/Cards";
 import Filters from "@/components/Filters";
+import { Card, FeatureCard } from "@/components/Cards";
+
+import { useAppwrite } from "@/lib/useAppwrite";
 import { useGlobalContext } from "@/lib/global-provider";
-import seed from "@/lib/seed";
+import { getLatestProperties, getProperties } from "@/lib/appwrite";
 
 export default function Index() {
   const { user } = useGlobalContext();
 
+  const params = useLocalSearchParams<{ query?: string; filter?: string }>();
+
+  const { data: latestProperties, loading: latestPropertiesLoading } =
+    useAppwrite({
+      fn: getLatestProperties,
+    });
+
+  const {
+    data: properties,
+    refetch,
+    loading,
+  } = useAppwrite({
+    fn: getProperties,
+    params: {
+      filter: params.filter!,
+      query: params.query!,
+      limit: 6,
+    },
+    skip: true,
+  });
+
+  useEffect(() => {
+    refetch({
+      filter: params.filter!,
+      query: params.query!,
+      limit: 6,
+    });
+  }, [params.filter, params.query]);
+  const handleCardPress = (id: string) => router.push(`/properties/${id}`);
+
   return (
     <SafeAreaView className="bg-white h-full">
       <FlatList
-        data={[1, 2]}
-        renderItem={({ item }) => <Card />}
+        data={properties}
+        renderItem={({ item }) => (
+          <Card item={item} onPress={() => handleCardPress(item.$id)} />
+        )}
         keyExtractor={(item) => item.toString()}
         numColumns={2}
         contentContainerClassName="pb-32"
@@ -62,8 +98,13 @@ export default function Index() {
               </View>
 
               <FlatList
-                data={[1, 2, 4]}
-                renderItem={({ item }) => <FeatureCard />}
+                data={latestProperties}
+                renderItem={({ item }) => (
+                  <FeatureCard
+                    item={item}
+                    onPress={() => handleCardPress(item.$id)}
+                  />
+                )}
                 keyExtractor={(item) => item.toString()}
                 horizontal
                 bounces={false}
