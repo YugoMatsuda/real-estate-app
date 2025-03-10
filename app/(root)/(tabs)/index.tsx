@@ -19,6 +19,7 @@ import { Card, FeatureCard } from "@/components/Cards";
 import { useAppwrite } from "@/lib/useAppwrite";
 import { useGlobalContext } from "@/lib/global-provider";
 import { getLatestProperties, getProperties } from "@/lib/appwrite";
+import NoResults from "@/components/NoResults";
 
 export default function Index() {
   const { user } = useGlobalContext();
@@ -60,11 +61,18 @@ export default function Index() {
         renderItem={({ item }) => (
           <Card item={item} onPress={() => handleCardPress(item.$id)} />
         )}
-        keyExtractor={(item) => item.toString()}
+        keyExtractor={(item) => item.$id}
         numColumns={2}
         contentContainerClassName="pb-32"
         columnWrapperClassName="flex gap-5 px-5"
         showsVerticalScrollIndicator={false}
+        ListEmptyComponent={
+          loading ? (
+            <ActivityIndicator size="large" className="text-primary-300 mt-5" />
+          ) : (
+            <NoResults />
+          )
+        }
         ListHeaderComponent={
           <View className="px-5">
             <View className="flex flex-row items-center justify-between mt-5">
@@ -105,11 +113,21 @@ export default function Index() {
                     onPress={() => handleCardPress(item.$id)}
                   />
                 )}
-                keyExtractor={(item) => item.toString()}
+                keyExtractor={(item) => item.$id}
                 horizontal
                 bounces={false}
                 showsHorizontalScrollIndicator={false}
                 contentContainerClassName="flex gap-5 mt-3"
+                ListEmptyComponent={
+                  loading ? (
+                    <ActivityIndicator
+                      size="large"
+                      className="text-primary-300 mt-5"
+                    />
+                  ) : (
+                    <NoResults />
+                  )
+                }
               />
 
               <View className="flex flex-row items-center justify-between mt-10">
